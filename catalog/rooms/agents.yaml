@@ -1,0 +1,9 @@
+id: agents
+area: workshop
+name: "Agents at work"
+summary: "Which agent is doing what."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/runbooks/README.md
+exit_path: "One file per agent; no state lives in this app."
+status: not connected
+links: [tasks]

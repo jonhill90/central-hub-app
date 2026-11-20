@@ -1,13 +1,29 @@
 # central-hub-app
 
-A web app that will show the Central Hub lab as a map: **areas** (home lab, VPS apps, notebook and library, workshop, Azure parked) and the **rooms** inside them, drawn from catalog files.
+A web app that shows the Central Hub lab as a map: **areas** (home lab, VPS apps, notebook and library, workshop, Azure parked) and the **rooms** inside them. The side menu and every page are built from catalog files in `catalog/`, so adding a room is a file change, not a code change.
 
-**Status: nothing is built yet.** This repository holds only its rules and plans. The first code arrives in a later pull request, after these docs are merged. Run steps and the list of what the app reads and does not do will come with that code.
+Status: first slice. It is a plain web UI from standard parts, not a game.
 
-## Where to read
+## Run it
 
-- [AGENTS.md](AGENTS.md): the rules for agents and people working here.
-- [docs/PRD.md](docs/PRD.md): what it is for, the eight pillars, the swappable parts and their exit paths.
-- [docs/specs/0001-screen-shell-and-catalog.md](docs/specs/0001-screen-shell-and-catalog.md): the first change, with the test that will prove each line.
-- [docs/decisions/](docs/decisions/): why it is shaped this way.
-- [docs/glossary.md](docs/glossary.md): what the words mean.
+```
+npm ci
+npm run lint && npm test && npm run build
+npm run dev        # http://localhost:3000
+```
+
+## What it reads and does (disclosure)
+
+| It does | It does not |
+|---|---|
+| Read `catalog/areas.yaml` and `catalog/rooms/*.yaml` from disk, in one module (`src/lib/catalog.ts`) | Sign anyone in |
+| Show every record's status as `not connected` or `parked`, never a guessed value | Call a backend, a database, the lab or the internet |
+| Serve pages from one container (`output: standalone`) | Hold a secret, a hostname or a private network name |
+
+## Swappable parts
+
+Each part has an exit path; see [docs/PRD.md](docs/PRD.md).
+
+## Rules
+
+See [AGENTS.md](AGENTS.md). Branch, then pull request; docs change in the same pull request as the code.

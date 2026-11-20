@@ -1,0 +1,9 @@
+id: azure-parked
+area: azure
+name: "Azure backup storage"
+summary: "Moved to Proxmox; parked."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Nothing to remove; the subscription is the exit."
+status: parked
+links: []

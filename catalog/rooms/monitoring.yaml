@@ -1,0 +1,9 @@
+id: monitoring
+area: home-lab
+name: "Monitoring"
+summary: "Metrics, logs and alerts."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Standard exporters and OpenTelemetry; swap the dashboards freely."
+status: not connected
+links: [c1]

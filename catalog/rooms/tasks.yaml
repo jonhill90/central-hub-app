@@ -1,0 +1,9 @@
+id: tasks
+area: workshop
+name: "Tasks and pull requests"
+summary: "What is being built and what is waiting."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/runbooks/README.md
+exit_path: "Git and GitHub hold the truth; this page only points."
+status: not connected
+links: [agents]

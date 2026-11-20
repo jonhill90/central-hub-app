@@ -1,0 +1,9 @@
+id: omniroute
+area: vps-apps
+name: "OmniRoute"
+summary: "A model gateway that routes requests to providers."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/decisions/0046-run-omniroute-openclaw-and-hermes-agent-on-the-vps-in-rootless-podman-with-no-lab-reach.md
+exit_path: "Any OpenAI-compatible router; clients use the standard API."
+status: not connected
+links: [openclaw, hermes-agent]

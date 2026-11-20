@@ -1,0 +1,9 @@
+id: backups
+area: home-lab
+name: "Backups"
+summary: "Copies of the lab's data, kept on Proxmox."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Plain archive files readable without this stack."
+status: not connected
+links: [proxmox]

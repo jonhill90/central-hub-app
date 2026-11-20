@@ -1,0 +1,9 @@
+id: keycloak
+area: home-lab
+name: "Keycloak"
+summary: "Sign-in for people and services over OIDC."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Any OIDC provider; clients use standard OIDC only."
+status: not connected
+links: [c1]

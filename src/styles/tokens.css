@@ -1,0 +1,13 @@
+/* Design tokens as CSS variables: the one place colours live (a swappable seam). */
+:root {
+  --bg: #f7f8fa; --surface: #ffffff; --text: #1c2430; --muted: #4a5568;
+  --border: #cbd5e0; --accent: #1f5fa8; --accent-bg: #ebf4ff;
+  --warn: #7a4b00; --warn-bg: #fff4d6; --radius: 8px;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f141b; --surface: #171e28; --text: #e8edf3; --muted: #aab4c2;
+    --border: #2f3a4a; --accent: #7db4f0; --accent-bg: #16283d;
+    --warn: #f0c36a; --warn-bg: #3a2c0c;
+  }
+}

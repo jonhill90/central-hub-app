@@ -4,7 +4,7 @@ One file per agent, settings as YAML on top and notes below. The app only reads 
 
 ## Why files, and where they come from
 
-Jon's answers of 2026-10-13: one file per agent, plain agent vocabulary (no fantasy captions), kept in git. Slice 1 reads sample sheets from `catalog/agents/` in this repository. The module that reads them is the only one that does (`src/lib/agents.ts`), so the source can later move to an API or another repository without touching any page.
+Jon's answers of 2026-10-13 (given in the project chat and recorded in the agent notebook's agent-sheet draft, which is private, so this public repository cannot link to it): one file per agent, plain agent vocabulary (no fantasy captions), kept in git. Slice 1 reads sample sheets from `catalog/agents/` in this repository. The module that reads them is the only one that does (`src/lib/agents.ts`), so the source can later move to an API or another repository without touching any page.
 
 ## The rules the page must not break
 
@@ -17,7 +17,7 @@ Jon's answers of 2026-10-13: one file per agent, plain agent vocabulary (no fant
 
 ## Sheet shape (`schema: agent-sheet/0.1`)
 
-Required top-level keys: `schema`, `id`, `name`, `revision`, `owner`, `purpose`, `runtime`, `capabilities`, `equipment`, `authority`, `budgets`, `memory`, `interface`, `coordination`, `lifecycle`, `evaluations`. These are the ten fields of the draft. Any value may be the string `unknown`.
+Required top-level keys, 16 in all: `schema`, `id`, `name`, `revision`, `owner`, `purpose`, `runtime`, `capabilities`, `equipment`, `authority`, `budgets`, `memory`, `interface`, `coordination`, `lifecycle`, `evaluations`. They carry the draft's ten fields: field 1 (identity) is the first six keys, fields 2 to 8 are one key each (`runtime` to `interface`), field 9 (coordination and lifecycle) is the keys `coordination` and `lifecycle`, and field 10 is `evaluations`. The page shows these as ten sections. Any value may be the string `unknown`.
 
 ## Requirements
 
@@ -31,7 +31,7 @@ Required top-level keys: `schema`, `id`, `name`, `revision`, `owner`, `purpose`,
 | 6 | Only `src/lib/agents.ts` reads sheet files; components import no `fs` | `tests/seam.test.ts` |
 | 7 | The Agents link is in the menu; an unknown agent id returns 404 | `tests/nav.test.ts`, the screenshot run |
 | 8 | The sample sheets carry no hostname, address or secret | the hygiene check in CI |
-| 9 | `npm run lint`, `npm test`, `npm run build` pass and `npm audit --omit=dev` reports 0 | CI app job |
+| 9 | `npm run lint`, `npm test`, `npm run build` pass and `npm audit --omit=dev` reports 0 | the CI app job, which gets an `npm audit --omit=dev` step in the code pull request |
 
 ## Not in this spec
 

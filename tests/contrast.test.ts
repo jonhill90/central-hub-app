@@ -15,7 +15,7 @@ function theme(block: string) {
   const m = Object.fromEntries([...block.matchAll(/--([\w-]+):\s*(#[0-9a-f]{6})/gi)].map((x) => [x[1], x[2]]))
   return m as Record<string, string>
 }
-const [light, dark] = [css.split('@media')[0], css.split('@media')[1]].map(theme)
+const [dark, light] = [css.split('@media')[0], css.split('@media')[1]].map(theme)
 
 describe('theme contrast (WCAG 2.2 AA, 4.5:1)', () => {
   for (const [name, t] of [['light', light], ['dark', dark]] as const) {
@@ -23,7 +23,9 @@ describe('theme contrast (WCAG 2.2 AA, 4.5:1)', () => {
       expect(ratio(t.text, t.bg)).toBeGreaterThanOrEqual(4.5)
       expect(ratio(t.text, t.surface)).toBeGreaterThanOrEqual(4.5)
       expect(ratio(t.muted, t.surface)).toBeGreaterThanOrEqual(4.5)
-      expect(ratio(t.accent, t['accent-bg'])).toBeGreaterThanOrEqual(4.5)
+      expect(ratio(t.muted, t.raised)).toBeGreaterThanOrEqual(4.5)
+      expect(ratio(t.accent, t.raised)).toBeGreaterThanOrEqual(4.5)
+      expect(ratio(t['accent-hover'], t.surface)).toBeGreaterThanOrEqual(4.5)
       expect(ratio(t.accent, t.surface)).toBeGreaterThanOrEqual(4.5)
       expect(ratio(t.warn, t['warn-bg'])).toBeGreaterThanOrEqual(4.5)
     })

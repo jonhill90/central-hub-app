@@ -1,13 +1,13 @@
-/* Design tokens as CSS variables: the one place colours live (a swappable seam). */
+/* The slate theme (docs/standards/slate-theme.md): the one place colours live. */
 :root {
-  --bg: #f7f8fa; --surface: #ffffff; --text: #1c2430; --muted: #4a5568;
-  --border: #cbd5e0; --accent: #1f5fa8; --accent-bg: #ebf4ff;
-  --warn: #7a4b00; --warn-bg: #fff4d6; --radius: 8px;
+  --bg: #11171a; --surface: #1a2227; --raised: #232d33; --border: #3c4a52;
+  --text: #e2e8ec; --muted: #9aabb2; --accent: #6db33a; --accent-hover: #86c653;
+  --warn: #fbbf24; --warn-bg: #2d2a1d; --radius: 0;
 }
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --bg: #0f141b; --surface: #171e28; --text: #e8edf3; --muted: #aab4c2;
-    --border: #2f3a4a; --accent: #7db4f0; --accent-bg: #16283d;
-    --warn: #f0c36a; --warn-bg: #3a2c0c;
+    --bg: #eef1f3; --surface: #ffffff; --raised: #e4e9ec; --border: #c3cdd2;
+    --text: #1c2428; --muted: #4c5a63; --accent: #3b7316; --accent-hover: #2c5a0f;
+    --warn: #7a4b00; --warn-bg: #fff1c9; --radius: 0;
   }
 }

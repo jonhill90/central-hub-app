@@ -21,6 +21,15 @@ npm run dev        # http://localhost:3000
 | Show every record's status as `not connected` or `parked`, never a guessed value | Call a backend, a database, the lab or the internet |
 | Serve pages from one container (`output: standalone`) | Hold a secret, a hostname or a private network name |
 
+## The container image
+
+```
+docker build -t hub-app .
+docker run --read-only --tmpfs /tmp -p 3000:3000 hub-app
+```
+
+CI builds and tests this image on every pull request (the `image` job). Nothing is pushed anywhere yet: where the image is stored is open (decision 0004).
+
 ## The API and its contract
 
 Pages get data through one client, `src/lib/hub.ts`. It has a `local` mode (default) and an `http` mode (`HUB_API_MODE=http`, `HUB_API_URL=...`). The API is read-only and described in `openapi/hub-api.yaml` (`/api/v1/catalog`, `/api/v1/agents`). A replacement backend is acceptable when it passes the contract tests against its URL:

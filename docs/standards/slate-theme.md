@@ -4,7 +4,7 @@ The look of this app. A theme changes only tokens (colour, corner radius, font);
 
 ## Rules
 
-1. Cool greys on a blue-grey base. Four slate greys and one green: `#7a8e96`, `#60757d`, `#4c5a63`, `#3c4a52` are the greys the surfaces and lines come from.
+1. Cool greys on a blue-grey base. The four slate greys `#7a8e96`, `#60757d`, `#4c5a63`, `#3c4a52` anchor the palette (`--border` is the last one, and the light `--muted` is the third). The surfaces `--bg`, `--surface` and `--raised` are darker or lighter steps in the same hue, an agent pick, not values taken from those greys.
 2. Square corners: `--radius` is `0`. Nothing in `src/styles/` sets a border radius other than through `--radius`, except status dots.
 3. Green is for things you can act on: a link. It is not used for badges, borders or fills. Buttons, when added, follow the same rule or get their own record.
 4. Status colours are tinted chips (the colour as text on a 16% fill of itself over the surface), never a solid bar. One colour per state, everywhere: waiting amber, doing blue, ready green, blocked red, idea violet, parked grey. A chip always carries its word, never colour alone.

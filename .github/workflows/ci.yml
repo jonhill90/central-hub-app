@@ -52,7 +52,7 @@ jobs:
           test "$(docker exec hub id -u)" != "0"
       - name: Contract tests against the image
         run: HUB_API_URL=http://127.0.0.1:3000 npm run contract
-      - name: No private-looking text in the image's app files
+      - name: No private-looking text in the image's /app tree (library code under node_modules excluded)
         run: |
-          mkdir -p /tmp/imgfiles && docker cp hub:/app/catalog /tmp/imgfiles/ && docker cp hub:/app/server.js /tmp/imgfiles/
-          if grep -RIEn '(BEGIN [A-Z ]*PRIVATE KEY|ts\.net|100\.[0-9]+\.[0-9]+\.[0-9]+|10\.[0-9]+\.[0-9]+\.[0-9]+)' /tmp/imgfiles ; then echo "private-looking text found"; exit 1; fi
+          mkdir -p /tmp/imgfiles && docker cp hub:/app /tmp/imgfiles/
+          if grep -RIEn --exclude-dir=node_modules '(BEGIN [A-Z ]*PRIVATE KEY|ts\.net|100\.[0-9]+\.[0-9]+\.[0-9]+|10\.[0-9]+\.[0-9]+\.[0-9]+)' /tmp/imgfiles ; then echo "private-looking text found"; exit 1; fi

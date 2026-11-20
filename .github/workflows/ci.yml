@@ -36,9 +36,11 @@ jobs:
           HUB_API_URL=http://127.0.0.1:3000 npm run contract
       - name: Menu is plain links without scripts
         run: |
-          PORT=3000 HOSTNAME=127.0.0.1 node .next/standalone/server.js &
-          for i in 1 2 3 4 5 6 7 8 9 10; do curl -sf http://127.0.0.1:3000/ >/dev/null && break; sleep 1; done
-          n=$(curl -sf http://127.0.0.1:3000/ | grep -o '<nav id="side".*</nav>' | grep -o '<a ' | wc -l)
+          PORT=3001 HOSTNAME=127.0.0.1 node .next/standalone/server.js &
+          pid=$!
+          for i in 1 2 3 4 5 6 7 8 9 10; do curl -sf http://127.0.0.1:3001/ >/dev/null && break; sleep 1; done
+          n=$(curl -sf http://127.0.0.1:3001/ | grep -o '<nav id="side".*</nav>' | grep -o '<a ' | wc -l)
+          kill $pid
           echo "menu links: $n"
           test "$n" -ge 15
   image:

@@ -68,28 +68,52 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
   const open = groupOpen(nav, path)
 
   useEffect(() => { setJs(true) }, [])
+  const beforePalette = useRef<HTMLElement | null>(null)
+  const paletteOpen = useRef(false)
+  const openPalette = useCallback(() => {
+    beforePalette.current = document.activeElement as HTMLElement | null
+    paletteOpen.current = true
+    setPalette(true)
+  }, [])
+  const closePalette = useCallback(() => {
+    if (!paletteOpen.current) return
+    paletteOpen.current = false
+    setPalette(false)
+    setTimeout(() => beforePalette.current?.focus(), 0)
+  }, [])
   useEffect(() => { setDrawer(false) }, [path])
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); setPalette(true) }
-      else if (e.key === 'Escape') { setPalette(false); setDrawer(false) }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openPalette() }
+      else if (e.key === 'Escape') { closePalette(); setDrawer(false) }
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
-  const closeDrawer = useCallback(() => { setDrawer(false); menuBtn.current?.focus() }, [])
+  const closeDrawer = useCallback(() => setDrawer(false), [])
+
+  // Focus goes into the drawer when it opens and back to the Menu button when it closes, however it closes.
+  const wasOpen = useRef(false)
+  useEffect(() => {
+    if (drawer) {
+      document.querySelector<HTMLElement>('#side .find')?.focus()
+    } else if (wasOpen.current) {
+      menuBtn.current?.focus()
+    }
+    wasOpen.current = drawer
+  }, [drawer])
 
   return (
     <div className={`shell${js ? ' js' : ''}${drawer ? ' drawer' : ''}`}>
       <header className="topbar">
         <button ref={menuBtn} type="button" aria-expanded={drawer} aria-controls="side" onClick={() => setDrawer(!drawer)}>Menu</button>
         <span className="brand">Central Hub</span>
-        <button type="button" onClick={() => setPalette(true)}>Search</button>
+        <button type="button" onClick={openPalette}>Search</button>
       </header>
       {drawer && <div className="scrim" onClick={closeDrawer} />}
       <nav id="side" className="side" aria-label="Main">
         <div className="brand">Central Hub</div>
-        <button type="button" className="find" onClick={() => setPalette(true)}>Go to… <kbd>Ctrl K</kbd></button>
+        <button type="button" className="find" onClick={openPalette}>Go to… <kbd>Ctrl K</kbd></button>
         <ul>
           {nav.top.map((l) => (
             <li key={l.id}><Link href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</Link></li>
@@ -100,7 +124,7 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
         ))}
       </nav>
       <main>{children}</main>
-      {palette && <Palette nav={nav} onClose={() => setPalette(false)} />}
+      {palette && <Palette nav={nav} onClose={closePalette} />}
     </div>
   )
 }

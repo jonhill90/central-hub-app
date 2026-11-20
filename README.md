@@ -16,7 +16,8 @@ npm run dev        # http://localhost:3000
 
 | It does | It does not |
 |---|---|
-| Read `catalog/areas.yaml` and `catalog/rooms/*.yaml` from disk, in one module (`src/lib/catalog.ts`) | Sign anyone in |
+| Read `catalog/areas.yaml` and `catalog/rooms/*.yaml` from disk, in one module (`src/lib/catalog.ts`) |
+| Read agent sheets from `catalog/agents/*.md` (YAML on top, notes below) in one module (`src/lib/agents.ts`), and show them read-only at `/agents`; a sheet with a secret-looking key or value is rejected | Sign anyone in or edit a sheet (pickers and saving are later specs) |
 | Show every record's status as `not connected` or `parked`, never a guessed value | Call a backend, a database, the lab or the internet |
 | Serve pages from one container (`output: standalone`) | Hold a secret, a hostname or a private network name |
 

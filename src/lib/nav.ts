@@ -7,7 +7,10 @@ export interface Nav { top: NavLink[]; areas: NavGroup[] }
 /** The side menu, built only from the catalog: a room with no record has no link. */
 export function buildNav(c: Catalog): Nav {
   return {
-    top: [{ id: 'hub', label: 'Hub', href: '/' }],
+    top: [
+      { id: 'hub', label: 'Hub', href: '/' },
+      { id: 'agents', label: 'Agents', href: '/agents' },
+    ],
     areas: c.areas.map((a) => ({
       id: a.id,
       label: a.name,

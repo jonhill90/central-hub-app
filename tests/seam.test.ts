@@ -11,8 +11,9 @@ function walk(dir: string): string[] {
 const files = walk('src').filter((f) => /\.(ts|tsx)$/.test(f))
 
 describe('the catalog seam', () => {
-  it('only src/lib/catalog.ts imports node:fs or reads the catalog folder', () => {
-    const offenders = files.filter((f) => f !== path.join('src', 'lib', 'catalog.ts'))
+  it('only src/lib/catalog.ts and src/lib/agents.ts import node:fs or read the catalog folders', () => {
+    const readers = [path.join('src', 'lib', 'catalog.ts'), path.join('src', 'lib', 'agents.ts')]
+    const offenders = files.filter((f) => !readers.includes(f))
       .filter((f) => /from ['"](node:)?fs['"]|from ['"](node:)?fs\/promises['"]|catalog\/|\.yaml/.test(readFileSync(f, 'utf8')))
     expect(offenders).toEqual([])
   })

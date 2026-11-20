@@ -1,0 +1,9 @@
+id: notebook
+area: notebook-library
+name: "The notebook"
+summary: "Research, notes and tasks the agents keep."
+owner: Jon
+docs: https://github.com/jonhill90/inpara
+exit_path: "Plain Markdown in git."
+status: not connected
+links: [library]

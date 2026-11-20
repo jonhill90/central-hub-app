@@ -1,0 +1,37 @@
+# One record per area. The Hub home draws one card per record.
+# Nothing here grants access: a record only describes.
+- id: home-lab
+  name: "Home lab"
+  summary: "The Proxmox host and the Kubernetes cluster c1 with the services that run on it."
+  owner: Jon
+  docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+  exit_path: "Each room names its own exit path; the area itself is only a grouping."
+  status: not connected
+- id: vps-apps
+  name: "VPS apps"
+  summary: "Apps hosted on the VPS in rootless Podman, with no way into the lab."
+  owner: Jon
+  docs: https://github.com/jonhill90/central-hub/blob/main/docs/decisions/0046-run-omniroute-openclaw-and-hermes-agent-on-the-vps-in-rootless-podman-with-no-lab-reach.md
+  exit_path: "Each room names its own exit path."
+  status: not connected
+- id: notebook-library
+  name: "Notebook and library"
+  summary: "Where the agents keep notes, plans, asks and scratch files."
+  owner: Jon
+  docs: https://github.com/jonhill90/inpara
+  exit_path: "The notebook is plain Markdown in git; any editor reads it."
+  status: not connected
+- id: workshop
+  name: "Workshop"
+  summary: "Tasks, pull requests and agents at work."
+  owner: Jon
+  docs: https://github.com/jonhill90/central-hub
+  exit_path: "Tasks and pull requests live in git and GitHub, not in this app."
+  status: not connected
+- id: azure
+  name: "Azure"
+  summary: "Parked. Backups moved to Proxmox; the card stays so the map is honest."
+  owner: Jon
+  docs: https://github.com/jonhill90/central-hub
+  exit_path: "Nothing runs here; remove the card when the subscription is closed."
+  status: parked

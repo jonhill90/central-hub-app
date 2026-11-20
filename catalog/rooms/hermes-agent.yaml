@@ -1,0 +1,9 @@
+id: hermes-agent
+area: vps-apps
+name: "Hermes Agent"
+summary: "An agent app."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/decisions/0046-run-omniroute-openclaw-and-hermes-agent-on-the-vps-in-rootless-podman-with-no-lab-reach.md
+exit_path: "Runs from a container image; stop the unit to remove it."
+status: not connected
+links: [omniroute]

@@ -1,0 +1,9 @@
+id: argo-cd
+area: home-lab
+name: "Argo CD"
+summary: "Syncs the cluster from the git repository."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Any GitOps engine that reads plain manifests."
+status: not connected
+links: [c1]

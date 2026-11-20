@@ -1,0 +1,9 @@
+id: library
+area: notebook-library
+name: "The library"
+summary: "Scratch space shared by every thread."
+owner: Jon
+docs: https://github.com/jonhill90/inpara
+exit_path: "Plain files in a folder."
+status: not connected
+links: [notebook]

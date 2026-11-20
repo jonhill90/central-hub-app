@@ -1,0 +1,9 @@
+id: jellyfin
+area: home-lab
+name: "Jellyfin"
+summary: "Media server."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Media files stay plain files on disk."
+status: not connected
+links: [c1]

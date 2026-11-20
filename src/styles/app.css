@@ -1,0 +1,25 @@
+@import './tokens.css';
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
+a { color: var(--accent); }
+.shell { display: grid; grid-template-columns: 260px 1fr; min-height: 100vh; }
+.side { background: var(--surface); border-right: 1px solid var(--border); padding: 16px; }
+.side h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 16px 0 4px; }
+.side ul { list-style: none; margin: 0; padding: 0 0 0 8px; }
+.side a { display: block; padding: 3px 0; text-decoration: none; }
+.side a:hover, .side a:focus-visible { text-decoration: underline; }
+.brand { font-weight: 700; font-size: 18px; }
+main { padding: 24px; max-width: 1000px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; }
+.card h3 { margin: 0 0 4px; font-size: 17px; }
+.badge { display: inline-block; font-size: 12px; padding: 1px 8px; border-radius: 99px; background: var(--accent-bg); color: var(--accent); border: 1px solid var(--border); }
+.badge.parked { background: var(--warn-bg); color: var(--warn); }
+dl { display: grid; grid-template-columns: 120px 1fr; gap: 6px 12px; }
+dt { color: var(--muted); }
+.needs { border-left: 4px solid var(--accent); padding: 8px 12px; background: var(--surface); margin: 0 0 24px; }
+@media (max-width: 720px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { border-right: 0; border-bottom: 1px solid var(--border); }
+  dl { grid-template-columns: 1fr; }
+}

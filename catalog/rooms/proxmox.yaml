@@ -1,0 +1,9 @@
+id: proxmox
+area: home-lab
+name: "Proxmox host"
+summary: "The hypervisor every lab machine runs on."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Any KVM host can run the same VM definitions."
+status: not connected
+links: [argo-cd, backups]

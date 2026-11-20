@@ -1,0 +1,9 @@
+id: c1
+area: home-lab
+name: "Cluster c1"
+summary: "The Kubernetes cluster: nodes, Cilium, Gateway API."
+owner: Jon
+docs: https://github.com/jonhill90/central-hub/blob/main/docs/architecture.md
+exit_path: "Upstream Kubernetes; swap the distribution without changing manifests."
+status: not connected
+links: [argo-cd, keycloak, monitoring]

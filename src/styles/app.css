@@ -19,8 +19,27 @@ main { padding: 24px; max-width: 1000px; }
 dl { display: grid; grid-template-columns: 120px 1fr; gap: 6px 12px; }
 dt { color: var(--muted); }
 .needs { border-left: 4px solid var(--border); padding: 8px 12px; background: var(--surface); margin: 0 0 24px; }
+.topbar { display: none; }
+.side details { margin: 8px 0 0; }
+.side summary { cursor: pointer; font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); padding: 4px 0; }
+.side a[aria-current="page"] { color: var(--text); font-weight: 700; }
+button { font: inherit; color: var(--text); background: var(--raised); border: 1px solid var(--border); border-radius: var(--radius); padding: 4px 12px; cursor: pointer; }
+:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; }
+.find { width: 100%; text-align: left; margin: 12px 0 4px; color: var(--muted); display: flex; justify-content: space-between; }
+kbd { font: 12px ui-monospace, monospace; border: 1px solid var(--border); padding: 0 4px; }
+.muted { color: var(--muted); }
+.backdrop { position: fixed; inset: 0; background: var(--bg); opacity: .96; display: flex; justify-content: center; align-items: flex-start; padding-top: 12vh; z-index: 30; }
+.palette { width: min(560px, 92vw); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+.palette input { width: 100%; font: inherit; color: var(--text); background: var(--surface); border: 0; border-bottom: 1px solid var(--border); padding: 12px 16px; }
+.palette ul { list-style: none; margin: 0; padding: 0; max-height: 50vh; overflow: auto; }
+.palette li { padding: 8px 16px; cursor: pointer; }
+.palette li[aria-selected="true"] { background: var(--raised); }
+.scrim { position: fixed; inset: 0; background: var(--bg); opacity: .8; z-index: 10; }
 @media (max-width: 720px) {
   .shell { grid-template-columns: 1fr; }
   .side { border-right: 0; border-bottom: 1px solid var(--border); }
   dl { grid-template-columns: 1fr; }
+  .shell.js .topbar { display: flex; justify-content: space-between; align-items: center; padding: 8px 16px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 5; }
+  .shell.js .side { display: none; }
+  .shell.js.drawer .side { display: block; position: fixed; top: 0; bottom: 0; left: 0; width: min(300px, 86vw); overflow: auto; z-index: 20; border-right: 1px solid var(--border); }
 }

@@ -1,13 +1,13 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getCatalog } from '@/lib/catalog'
+import { hub } from '@/lib/hub'
 import { StatusBadge } from '@/components/StatusBadge'
 
 export const dynamic = 'force-dynamic'
 
 export default async function RoomPage({ params }: { params: Promise<{ room: string }> }) {
   const { room: id } = await params
-  const { areas, rooms } = getCatalog()
+  const { areas, rooms } = await hub().getCatalog()
   const room = rooms.find((r) => r.id === id)
   if (!room) notFound()
   const area = areas.find((a) => a.id === room.area)!

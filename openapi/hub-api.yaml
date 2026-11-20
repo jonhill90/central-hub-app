@@ -1,0 +1,115 @@
+openapi: 3.1.0
+info:
+  title: Central Hub API
+  version: 0.1.0
+  description: >
+    Read-only API behind the Central Hub web app. This file, not the code, is the
+    source of truth for the shape of an answer. A replacement backend is acceptable
+    when it passes the contract tests against its URL.
+servers:
+  - url: /
+paths:
+  /api/v1/catalog:
+    get:
+      operationId: getCatalog
+      summary: Areas and rooms
+      responses:
+        '200':
+          description: The catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Catalog'
+  /api/v1/agents:
+    get:
+      operationId: getAgents
+      summary: Agent sheets as the ten-section view
+      responses:
+        '200':
+          description: The agents
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Agents'
+components:
+  schemas:
+    Status:
+      enum: [not connected, parked, ok, unknown]
+    Area:
+      type: object
+      additionalProperties: false
+      required: [id, name, summary, owner, docs, exit_path, status]
+      properties:
+        id: {type: string, minLength: 1}
+        name: {type: string, minLength: 1}
+        summary: {type: string, minLength: 1}
+        owner: {type: string, minLength: 1}
+        docs: {type: string, pattern: '^https://'}
+        exit_path: {type: string, minLength: 1}
+        status: {$ref: '#/components/schemas/Status'}
+    Room:
+      type: object
+      additionalProperties: false
+      required: [id, name, summary, owner, docs, exit_path, status, area, links]
+      properties:
+        id: {type: string, minLength: 1}
+        name: {type: string, minLength: 1}
+        summary: {type: string, minLength: 1}
+        owner: {type: string, minLength: 1}
+        docs: {type: string, pattern: '^https://'}
+        exit_path: {type: string, minLength: 1}
+        status: {$ref: '#/components/schemas/Status'}
+        area: {type: string, minLength: 1}
+        links:
+          type: array
+          items: {type: string}
+    Catalog:
+      type: object
+      additionalProperties: false
+      required: [areas, rooms]
+      properties:
+        areas:
+          type: array
+          items: {$ref: '#/components/schemas/Area'}
+        rooms:
+          type: array
+          items: {$ref: '#/components/schemas/Room'}
+    Field:
+      type: object
+      additionalProperties: false
+      required: [label, value]
+      properties:
+        label: {type: string, minLength: 1}
+        value: {type: string, minLength: 1}
+    Section:
+      type: object
+      additionalProperties: false
+      required: [title, fields]
+      properties:
+        title: {type: string, minLength: 1}
+        fields:
+          type: array
+          items: {$ref: '#/components/schemas/Field'}
+    Agent:
+      type: object
+      additionalProperties: false
+      required: [id, name, purpose, revision, notes, sections]
+      properties:
+        id: {type: string, minLength: 1}
+        name: {type: string, minLength: 1}
+        purpose: {type: string, minLength: 1}
+        revision: {type: string, minLength: 1}
+        notes: {type: string}
+        sections:
+          type: array
+          minItems: 10
+          maxItems: 10
+          items: {$ref: '#/components/schemas/Section'}
+    Agents:
+      type: object
+      additionalProperties: false
+      required: [agents]
+      properties:
+        agents:
+          type: array
+          items: {$ref: '#/components/schemas/Agent'}

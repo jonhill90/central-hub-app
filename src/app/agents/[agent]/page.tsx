@@ -1,12 +1,12 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { getAgents } from '@/lib/agents'
+import { hub } from '@/lib/hub'
 
 export const dynamic = 'force-dynamic'
 
 export default async function AgentPage({ params }: { params: Promise<{ agent: string }> }) {
   const { agent: id } = await params
-  const agent = getAgents().find((a) => a.id === id)
+  const agent = (await hub().getAgents()).find((a) => a.id === id)
   if (!agent) notFound()
   return (
     <>

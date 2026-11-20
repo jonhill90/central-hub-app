@@ -1,11 +1,11 @@
 import Link from 'next/link'
-import { getCatalog } from '@/lib/catalog'
+import { hub } from '@/lib/hub'
 import { StatusBadge } from '@/components/StatusBadge'
 
 export const dynamic = 'force-dynamic'
 
-export default function Hub() {
-  const { areas, rooms } = getCatalog()
+export default async function Hub() {
+  const { areas, rooms } = await hub().getCatalog()
   return (
     <>
       <h1>Hub</h1>

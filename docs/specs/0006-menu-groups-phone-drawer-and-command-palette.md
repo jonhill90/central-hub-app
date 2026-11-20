@@ -25,7 +25,7 @@ The first pieces taken from the owner's earlier app (`services/ui` in `jonhill90
 | 3 | `groupOpen(nav, pathname)` opens exactly the group that holds the current page, and none on the home page | `tests/palette.test.ts` |
 | 4 | Pages and components import data only from `src/lib/hub.ts` (as before, with the new components included) | `tests/seam.test.ts` |
 | 5 | No hex colour and no new dependency in the new files | `tests/slate.test.ts` and `docs/standards/components.md` check in CI |
-| 6 | The built app serves the menu as plain links without scripts | the CI `app` job step "Menu is plain links without scripts" (fetches `/` with curl and counts the menu's links) |
+| 6 | The built app serves the menu as plain links without scripts | `contract/menu.test.ts` (fetches `/` and counts the links) |
 
 ## Not proven
 
@@ -34,3 +34,7 @@ The drawer, focus handling and palette keyboard behaviour are checked by hand wi
 ## Exit path
 
 Each component is one file and takes plain props. Drop one by deleting its file and its line in the layout.
+
+## Changes after merge
+
+- 2026-11-20 (the code PR): requirement 6 is proven by the CI step "Menu is plain links without scripts", not by `contract/menu.test.ts`, because the contract suite must know nothing of this app's pages (spec 0003). The row above is left as merged.

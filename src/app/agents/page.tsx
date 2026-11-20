@@ -1,10 +1,10 @@
 import Link from 'next/link'
-import { getAgents } from '@/lib/agents'
+import { hub } from '@/lib/hub'
 
 export const dynamic = 'force-dynamic'
 
-export default function Agents() {
-  const agents = getAgents()
+export default async function Agents() {
+  const agents = await hub().getAgents()
   return (
     <>
       <p><Link href="/">Hub</Link></p>

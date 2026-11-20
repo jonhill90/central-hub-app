@@ -10,7 +10,12 @@ function walk(dir: string): string[] {
 }
 const files = walk('src').filter((f) => /\.(ts|tsx)$/.test(f))
 
-describe('the catalog seam', () => {
+describe('the data seam', () => {
+  it('pages import data only from src/lib/hub.ts; only hub.ts imports the readers', () => {
+    const importers = files.filter((f) => /from ['"]@\/lib\/(catalog|agents)['"]|from ['"]\.\/(catalog|agents)['"]/.test(readFileSync(f, 'utf8')))
+    expect(importers).toEqual([path.join('src', 'lib', 'hub.ts')])
+  })
+
   it('only src/lib/catalog.ts and src/lib/agents.ts import node:fs or read the catalog folders', () => {
     const readers = [path.join('src', 'lib', 'catalog.ts'), path.join('src', 'lib', 'agents.ts')]
     const offenders = files.filter((f) => !readers.includes(f))

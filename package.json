@@ -8,7 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "tsc --noEmit",
-    "test": "vitest run"
+    "test": "vitest run",
+    "contract": "vitest run --config vitest.contract.config.ts"
   },
   "dependencies": {
     "next": "16.4.5",
@@ -20,6 +21,7 @@
     "@types/node": "25.2.3",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "ajv": "8.20.0",
     "typescript": "5.9.3",
     "vitest": "3.2.7"
   }

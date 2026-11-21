@@ -74,9 +74,11 @@ describe('the guard (req 4)', () => {
   const ok = { mode: 'oidc' }
   const cookie = seal({ sub: 'u', name: 'u', groups: [], exp: NOW / 1000 + 10 }, key)
   it('off lets everything through', () => expect(decide({ mode: 'off' }, null, '/areas/x', '', undefined, NOW)).toEqual({ action: 'allow' }))
-  it('broken answers 503 for everything, even public paths', () => {
+  it('broken answers 503 for everything but the probe, even the sign-in routes', () => {
     expect(decide({ mode: 'broken', reason: 'r' }, null, '/', '', undefined, NOW)).toEqual({ action: 'deny', status: 503, message: 'r' })
-    expect(decide({ mode: 'broken' }, null, '/api/v1/health', '', undefined, NOW)).toMatchObject({ status: 503 })
+    expect(decide({ mode: 'broken' }, null, '/auth/login', '', undefined, NOW)).toMatchObject({ status: 503 })
+    expect(decide({ mode: 'broken' }, null, '/api/v1/catalog', '', undefined, NOW)).toMatchObject({ status: 503 })
+    expect(decide({ mode: 'broken' }, null, '/api/v1/health', '', undefined, NOW)).toEqual({ action: 'allow' })
   })
   it('a page without a session goes to sign-in, an API call gets 401, a session passes', () => {
     expect(decide(ok, key, '/areas/x', '?q=1', undefined, NOW)).toEqual({ action: 'login', next: '/areas/x?q=1' })

@@ -21,7 +21,7 @@ export function safeNext(v: string | null | undefined): string {
 }
 
 export function decide(cfg: { mode: string; reason?: string }, key: Buffer | null, pathname: string, search: string, cookie: string | undefined, now = Date.now()): Decision {
-  if (cfg.mode === 'off') return { action: 'allow' }
+  if (cfg.mode === 'off' || pathname === '/api/v1/health') return { action: 'allow' }
   if (cfg.mode !== 'oidc' || !key) return { action: 'deny', status: 503, message: cfg.reason || 'sign-in is not configured' }
   if (isPublic(pathname)) return { action: 'allow' }
   if (unseal<Session>(cookie, key, now)) return { action: 'allow' }

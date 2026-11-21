@@ -57,8 +57,10 @@ jobs:
           PORT=3003 HOSTNAME=127.0.0.1 HUB_AUTH=oidc HUB_OIDC_DIR=/nonexistent node .next/standalone/server.js &
           pid=$!
           for i in 1 2 3 4 5 6 7 8 9 10; do curl -s -o /dev/null http://127.0.0.1:3003/api/v1/health && break; sleep 1; done
-          test "$(code http://127.0.0.1:3003/api/v1/health)" = 503
+          test "$(code http://127.0.0.1:3003/api/v1/health)" = 200
+          curl -sf http://127.0.0.1:3003/api/v1/health | grep -q 'not configured'
           test "$(code http://127.0.0.1:3003/)" = 503
+          test "$(code http://127.0.0.1:3003/api/v1/catalog)" = 503
           kill $pid
       - name: Menu is plain links without scripts
         run: |

@@ -6,7 +6,7 @@ Every part, its licence and its pin. Licences are the fields in each package's `
 |---|---|---|---|
 | next | 16.4.5 | Web framework | Any React renderer or a plain SPA behind the same catalog module |
 | react, react-dom | 19.0.0 | UI | Same |
-| lucide-react | 1.68.0 | Icons in the menu, tiles and cards (ISC; published 2026-11-04, 17 days before use; peer react ^19 holds; `npm audit --omit=dev` reports 0 vulnerabilities) | Inline SVG files; icons are chosen in `src/components/icons.ts` and the page files only |
+| lucide-react | 1.68.0 | Icons in the menu, tiles and cards (ISC; published 2026-11-04, 17 days before use; peer react ^19 holds; `npm audit --omit=dev` reports 0 vulnerabilities) | Inline SVG files; imported only in `src/components/` and the page files; swapping it touches those imports |
 | yaml | 2.9.1 | Reads catalog files | Any YAML parser |
 | typescript | 5.9.3 | Types and `lint` | None needed |
 | vitest | 3.2.7 | Tests | Any test runner |

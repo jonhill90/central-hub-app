@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { DoorOpen } from 'lucide-react'
 import { hub } from '@/lib/hub'
 import { StatusBadge } from '@/components/StatusBadge'
 
@@ -25,7 +26,7 @@ export default async function AreaPage({ params }: { params: Promise<{ area: str
       <div className="grid">
         {rooms.filter((r) => r.area === id).map((r) => (
           <article className="card" key={r.id}>
-            <h3><Link href={`/rooms/${r.id}`}>{r.name}</Link></h3>
+            <div className="head"><span className="icon-box"><DoorOpen size={20} aria-hidden="true" /></span><h3><Link href={`/rooms/${r.id}`}>{r.name}</Link></h3></div>
             <p>{r.summary}</p>
             <StatusBadge status={r.status} />
           </article>

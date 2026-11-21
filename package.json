@@ -12,6 +12,7 @@
     "contract": "vitest run --config vitest.contract.config.ts"
   },
   "dependencies": {
+    "lucide-react": "1.68.0",
     "next": "16.4.5",
     "react": "19.0.0",
     "react-dom": "19.0.0",

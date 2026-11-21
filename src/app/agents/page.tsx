@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { Bot } from 'lucide-react'
 import { hub } from '@/lib/hub'
 
 export const dynamic = 'force-dynamic'
@@ -13,7 +14,7 @@ export default async function Agents() {
       <div className="grid">
         {agents.map((a) => (
           <article className="card" key={a.id}>
-            <h3><Link href={`/agents/${a.id}`}>{a.name}</Link></h3>
+            <div className="head"><span className="icon-box"><Bot size={20} aria-hidden="true" /></span><h3><Link href={`/agents/${a.id}`}>{a.name}</Link></h3></div>
             <p>{a.purpose}</p>
             <small>revision {a.revision}</small>
           </article>

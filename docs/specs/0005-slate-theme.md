@@ -32,3 +32,7 @@ The menu groups, the phone drawer, the command palette and status chips as a com
 ## Exit path
 
 Delete `tokens.css`' slate values and put another set under the same names; the tests then fail until the standard changes with them.
+
+## Changes after merge
+
+- 2026-11-21: requirements 2 and 3 changed (rounded corners, green on the current item, icon boxes and the filled button) by spec 0008 and decision 0006. The rows above are left as merged.

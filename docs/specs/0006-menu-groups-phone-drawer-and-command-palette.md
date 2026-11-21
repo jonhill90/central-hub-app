@@ -38,3 +38,4 @@ Each component is one file and takes plain props. Drop one by deleting its file 
 ## Changes after merge
 
 - 2026-11-20 (the code PR): requirement 6 is proven by the CI step "Menu is plain links without scripts", not by `contract/menu.test.ts`, because the contract suite must know nothing of this app's pages (spec 0003). The row above is left as merged.
+- 2026-11-21: rule 3 (no icon library) is replaced by spec 0008: `lucide-react` is now a listed part, and the shell has the mark and icons.

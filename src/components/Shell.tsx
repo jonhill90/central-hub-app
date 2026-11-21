@@ -2,16 +2,25 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
+import { Bot, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Home, Menu, Search } from 'lucide-react'
 import type { Nav } from '@/lib/nav'
+import { areaIcon } from './icons'
+import { HillLogo } from './HillLogo'
 import { filterLinks, flattenNav, groupOpen } from '@/lib/palette'
 
-function Group({ id, label, href, open, children }: { id: string; label: string; href: string; open: boolean; children: { id: string; label: string; href: string }[] }) {
+function Group({ id, label, href, open, collapsed, expand, children }: { id: string; label: string; href: string; open: boolean; collapsed: boolean; expand: () => void; children: { id: string; label: string; href: string }[] }) {
   const path = usePathname()
+  const Icon = areaIcon(id)
   const [isOpen, setOpen] = useState(open)
   useEffect(() => { setOpen(open) }, [open])
   return (
     <details open={isOpen} onToggle={(e) => setOpen((e.target as HTMLDetailsElement).open)} data-group={id}>
-      <summary>{label}</summary>
+      <summary title={collapsed ? label : undefined} onClick={(e) => { if (collapsed) { e.preventDefault(); expand(); setOpen(true) } }}>
+        <Icon size={20} aria-hidden="true" />
+        <span className="lbl">{label}</span>
+        <ChevronRight size={16} aria-hidden="true" className="chev closed" />
+        <ChevronDown size={16} aria-hidden="true" className="chev opened" />
+      </summary>
       <ul>
         <li><Link href={href} aria-current={path === href ? 'page' : undefined}>All of {label}</Link></li>
         {children.map((c) => (
@@ -96,32 +105,51 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
   const wasOpen = useRef(false)
   useEffect(() => {
     if (drawer) {
-      document.querySelector<HTMLElement>('#side .find')?.focus()
+      document.querySelector<HTMLElement>('#side a')?.focus()
     } else if (wasOpen.current) {
       menuBtn.current?.focus()
     }
     wasOpen.current = drawer
   }, [drawer])
 
+  const [collapsed, setCollapsed] = useState(false)
+  useEffect(() => { try { setCollapsed(localStorage.getItem('sidebar-collapsed') === 'true') } catch { /* private window */ } }, [])
+  const setCollapse = useCallback((v: boolean) => {
+    setCollapsed(v)
+    try { localStorage.setItem('sidebar-collapsed', String(v)) } catch { /* private window */ }
+  }, [])
+
   return (
-    <div className={`shell${js ? ' js' : ''}${drawer ? ' drawer' : ''}`}>
+    <div className={`shell${js ? ' js' : ''}${drawer ? ' drawer' : ''}${collapsed ? ' collapsed' : ''}`}>
       <header className="topbar">
-        <button ref={menuBtn} type="button" aria-expanded={drawer} aria-controls="side" onClick={() => setDrawer(!drawer)}>Menu</button>
-        <span className="brand">Central Hub</span>
-        <button type="button" onClick={openPalette}>Search</button>
+        <button ref={menuBtn} type="button" className="menu-btn" aria-label="Open menu" aria-expanded={drawer} aria-controls="side" onClick={() => setDrawer(!drawer)}><Menu size={22} aria-hidden="true" /></button>
+        <Link href="/" className="logo-link" aria-label="Central Hub home"><HillLogo /></Link>
+        <button type="button" className="search" onClick={openPalette}>
+          <Search size={16} aria-hidden="true" />
+          <span className="lbl">Go to an area, room or page</span>
+          <kbd>Ctrl K</kbd>
+        </button>
       </header>
       {drawer && <div className="scrim" onClick={closeDrawer} />}
       <nav id="side" className="side" aria-label="Main">
-        <div className="brand">Central Hub</div>
-        <button type="button" className="find" onClick={openPalette}>Go to… <kbd>Ctrl K</kbd></button>
-        <ul>
-          {nav.top.map((l) => (
-            <li key={l.id}><Link href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</Link></li>
-          ))}
+        <ul className="top">
+          {nav.top.map((l) => {
+            const Icon = l.id === 'agents' ? Bot : Home
+            return (
+              <li key={l.id}>
+                <Link href={l.href} title={collapsed ? l.label : undefined} aria-current={path === l.href || (l.href !== '/' && path.startsWith(l.href + '/')) ? 'page' : undefined}>
+                  <Icon size={20} aria-hidden="true" /><span className="lbl">{l.label}</span>
+                </Link>
+              </li>
+            )
+          })}
         </ul>
         {nav.areas.map((g) => (
-          <Group key={g.id} id={g.id} label={g.label} href={g.href} open={open === g.id}>{g.children}</Group>
+          <Group key={g.id} id={g.id} label={g.label} href={g.href} open={open === g.id} collapsed={collapsed} expand={() => setCollapse(false)}>{g.children}</Group>
         ))}
+        <button type="button" className="collapse" aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'} onClick={() => setCollapse(!collapsed)}>
+          {collapsed ? <ChevronsRight size={18} aria-hidden="true" /> : <ChevronsLeft size={18} aria-hidden="true" />}
+        </button>
       </nav>
       <main>{children}</main>
       {palette && <Palette nav={nav} onClose={closePalette} />}

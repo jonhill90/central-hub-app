@@ -61,5 +61,5 @@ export function Bell_() {
 
 /** The avatar. Sign-in is off, so it is a plain person mark with no name. */
 export function Avatar() {
-  return <span className="avatar" role="img" aria-label="Not signed in"><User size={18} aria-hidden="true" /></span>
+  return <span className="avatar" role="img" aria-label="Not signed in" title="Not signed in"><User size={18} aria-hidden="true" /></span>
 }

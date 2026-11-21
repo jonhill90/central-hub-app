@@ -29,5 +29,6 @@ describe('top bar', () => {
   it('the bell shows no invented items (req 4)', () => {
     expect(tools).toContain('Nothing is waiting')
     expect(tools).not.toMatch(/MOCK|Math\.random/)
+    expect(tools).toMatch(/title="Not signed in"/)
   })
 })

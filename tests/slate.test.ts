@@ -41,6 +41,11 @@ describe('slate theme', () => {
     const allowed = (sel: string) => /^a(:|$)/.test(sel) || /\sa(:|$)/.test(sel) || /^\.side a\[aria-current="page"\]/.test(sel) || sel === '.icon-box' || sel === '.search:focus-within' || sel === '.btn.primary:hover'
     for (const r of rules) expect(r.split('{')[0].trim().split(',').every((sel) => allowed(sel.trim())), r).toBe(true)
   })
+  it('--accent-fill appears only in the primary button rule (req 3)', () => {
+    const rules = app.split('}').filter((r) => r.includes('var(--accent-fill)'))
+    expect(rules.length).toBeGreaterThan(0)
+    for (const r of rules) expect(r.split('{')[0].trim().split(',').every((sel) => ['.btn.primary', '.btn.primary:hover'].includes(sel.trim())), r).toBe(true)
+  })
   it('buttons are filled from --accent-fill, never from --accent (req 3)', () => {
     expect(app).toMatch(/\.btn\.primary\s*\{[^}]*var\(--accent-fill\)/)
   })

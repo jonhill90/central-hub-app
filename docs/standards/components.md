@@ -17,3 +17,5 @@ Every part, its licence and its pin. Licences are the fields in each package's `
 Next 16.3.0 was replaced by 16.4.5 on 2026-11-20 after `npm audit --omit=dev` reported a critical advisory on 16.3.0 (GHSA-2464-fhr4-w9xw). 16.4.5 was published 2026-11-03, so it meets the 14-day pin rule; `npm audit --omit=dev` on it reports 0 vulnerabilities.
 
 The base image's digest was read from the registry on 2026-11-20 by tag, and the tag `22.21.1-alpine` was last pushed 2025-12-18 (Docker Hub tag API), so the digest is well over 14 days old.
+
+Sign-in (spec 0007, decision 0005) adds no part: it uses `node:crypto` from the node runtime already listed.

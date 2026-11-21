@@ -6,6 +6,7 @@ import { Bot, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Home, Menu
 import type { Nav } from '@/lib/nav'
 import { areaIcon } from './icons'
 import { HillLogo } from './HillLogo'
+import { Avatar, Bell_, ThemeToggle } from './TopBarTools'
 import { filterLinks, flattenNav, groupOpen } from '@/lib/palette'
 
 function Group({ id, label, href, open, collapsed, expand, children }: { id: string; label: string; href: string; open: boolean; collapsed: boolean; expand: () => void; children: { id: string; label: string; href: string }[] }) {
@@ -93,7 +94,11 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
   useEffect(() => { setDrawer(false) }, [path])
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') { e.preventDefault(); openPalette() }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        const box = searchIn.current
+        if (box && box.offsetParent !== null) box.focus(); else openPalette()
+      }
       else if (e.key === 'Escape') { closePalette(); setDrawer(false) }
     }
     window.addEventListener('keydown', onKey)
@@ -112,6 +117,13 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
     wasOpen.current = drawer
   }, [drawer])
 
+  const router = useRouter()
+  const searchIn = useRef<HTMLInputElement>(null)
+  const [sq, setSq] = useState('')
+  const [sOpen, setSOpen] = useState(false)
+  const [hi, setHi] = useState(0)
+  const hits = filterLinks(flattenNav(nav), sq)
+  const showHits = sOpen && sq.trim().length > 0
   const [collapsed, setCollapsed] = useState(false)
   useEffect(() => { try { setCollapsed(localStorage.getItem('sidebar-collapsed') === 'true') } catch { /* private window */ } }, [])
   const setCollapse = useCallback((v: boolean) => {
@@ -124,11 +136,42 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
       <header className="topbar">
         <button ref={menuBtn} type="button" className="menu-btn" aria-label="Open menu" aria-expanded={drawer} aria-controls="side" onClick={() => setDrawer(!drawer)}><Menu size={22} aria-hidden="true" /></button>
         <Link href="/" className="logo-link" aria-label="Central Hub home"><HillLogo /></Link>
-        <button type="button" className="search" onClick={openPalette}>
+        <div className="search" role="search">
           <Search size={16} aria-hidden="true" />
-          <span className="lbl">Go to an area, room or page</span>
+          <input
+            ref={searchIn}
+            type="search"
+            role="combobox"
+            aria-expanded={showHits}
+            aria-controls="search-list"
+            aria-label="Search the hub"
+            aria-activedescendant={showHits && hits[hi] ? `sr-${hi}` : undefined}
+            placeholder="Search areas, rooms, agents..."
+            value={sq}
+            onChange={(e) => { setSq(e.target.value); setHi(0); setSOpen(true) }}
+            onFocus={() => setSOpen(true)}
+            onBlur={() => setTimeout(() => setSOpen(false), 120)}
+            onKeyDown={(e) => {
+              if (e.key === 'ArrowDown') { e.preventDefault(); setHi(Math.min(hi + 1, hits.length - 1)) }
+              else if (e.key === 'ArrowUp') { e.preventDefault(); setHi(Math.max(hi - 1, 0)) }
+              else if (e.key === 'Enter' && hits[hi]) { setSq(''); setSOpen(false); router.push(hits[hi].href) }
+              else if (e.key === 'Escape') { setSOpen(false); searchIn.current?.blur() }
+            }}
+          />
           <kbd>Ctrl K</kbd>
-        </button>
+          <button type="button" className="search-icon" aria-label="Search" onClick={openPalette}><Search size={20} aria-hidden="true" /></button>
+          {showHits && (
+            <ul id="search-list" role="listbox" className="hits">
+              {hits.slice(0, 8).map((l, n) => (
+                <li key={l.href} id={`sr-${n}`} role="option" aria-selected={n === hi} onMouseDown={() => { setSq(''); setSOpen(false); router.push(l.href) }}>
+                  {l.label}{l.group ? <span className="muted"> · {l.group}</span> : null}
+                </li>
+              ))}
+              {hits.length === 0 && <li className="muted">Nothing matches.</li>}
+            </ul>
+          )}
+        </div>
+        <div className="tools"><Bell_ /><ThemeToggle /><Avatar /></div>
       </header>
       {drawer && <div className="scrim" onClick={closeDrawer} />}
       <nav id="side" className="side" aria-label="Main">

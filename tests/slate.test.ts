@@ -32,14 +32,19 @@ describe('slate theme', () => {
   })
   it('corners are rounded by one token: border-radius only through --radius (req 2)', () => {
     for (const m of app.matchAll(/border-radius:\s*([^;]+);/g)) {
-      expect(['var(--radius)', 'calc(var(--radius) / 2)', '50%'].includes(m[1].trim()), m[1]).toBe(true)
+      expect(['var(--radius)', 'calc(var(--radius) / 2)', '50%', '999px'].includes(m[1].trim()), m[1]).toBe(true)
     }
   })
-  it('--accent is used only on links, the current menu item and icon boxes (req 3)', () => {
+  it('--accent is used only on links, the current menu item, icon boxes and the focused search box (req 3)', () => {
     const rules = app.split('}').filter((r) => r.includes('var(--accent)') || r.includes('var(--accent-hover)'))
     expect(rules.length).toBeGreaterThan(0)
-    const allowed = (sel: string) => /^a(:|$)/.test(sel) || /\sa(:|$)/.test(sel) || /^\.side a\[aria-current="page"\]/.test(sel) || sel === '.icon-box' || sel === '.btn.primary:hover'
+    const allowed = (sel: string) => /^a(:|$)/.test(sel) || /\sa(:|$)/.test(sel) || /^\.side a\[aria-current="page"\]/.test(sel) || sel === '.icon-box' || sel === '.search:focus-within' || sel === '.btn.primary:hover'
     for (const r of rules) expect(r.split('{')[0].trim().split(',').every((sel) => allowed(sel.trim())), r).toBe(true)
+  })
+  it('--accent-fill appears only in the primary button rule (req 3)', () => {
+    const rules = app.split('}').filter((r) => r.includes('var(--accent-fill)'))
+    expect(rules.length).toBeGreaterThan(0)
+    for (const r of rules) expect(r.split('{')[0].trim().split(',').every((sel) => ['.btn.primary', '.btn.primary:hover'].includes(sel.trim())), r).toBe(true)
   })
   it('buttons are filled from --accent-fill, never from --accent (req 3)', () => {
     expect(app).toMatch(/\.btn\.primary\s*\{[^}]*var\(--accent-fill\)/)

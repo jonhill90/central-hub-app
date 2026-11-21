@@ -1,5 +1,5 @@
 /* The slate theme (docs/standards/slate-theme.md): the one place colours live. */
-:root {
+:root, :root[data-theme="dark"] {
   --bg: #11171a; --surface: #1a2227; --raised: #232d33; --border: #3c4a52;
   --text: #e2e8ec; --muted: #9aabb2; --accent: #6db33a; --accent-hover: #86c653;
   --accent-fill: #4a8024; --on-accent: #ffffff;
@@ -7,11 +7,18 @@
   --warn: #fbbf24; --warn-bg: #2d2a1d; --radius: 8px;
 }
 @media (prefers-color-scheme: light) {
-  :root {
+  :root:not([data-theme="dark"]) {
     --bg: #eef1f3; --surface: #ffffff; --raised: #e4e9ec; --border: #c3cdd2;
     --text: #1c2428; --muted: #4c5a63; --accent: #3b7316; --accent-hover: #2c5a0f;
     --accent-fill: #3b7316; --on-accent: #ffffff;
     --logo-light: #7a8e96; --logo-dark: #4c5a63;
     --warn: #7a4b00; --warn-bg: #fff1c9; --radius: 8px;
   }
+}
+:root[data-theme="light"] {
+  --bg: #eef1f3; --surface: #ffffff; --raised: #e4e9ec; --border: #c3cdd2;
+  --text: #1c2428; --muted: #4c5a63; --accent: #3b7316; --accent-hover: #2c5a0f;
+  --accent-fill: #3b7316; --on-accent: #ffffff;
+  --logo-light: #7a8e96; --logo-dark: #4c5a63;
+  --warn: #7a4b00; --warn-bg: #fff1c9; --radius: 8px;
 }

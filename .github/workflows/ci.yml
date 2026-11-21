@@ -34,6 +34,38 @@ jobs:
           PORT=3000 HOSTNAME=127.0.0.1 node .next/standalone/server.js &
           for i in 1 2 3 4 5 6 7 8 9 10; do curl -sf http://127.0.0.1:3000/api/v1/catalog >/dev/null && break; sleep 1; done
           HUB_API_URL=http://127.0.0.1:3000 npm run contract
+      - name: Sign-in is enforced by the built app
+        run: |
+          d=$(mktemp -d)
+          printf '%s' https://sso.example.com/realms/lab > "$d/issuer"
+          printf '%s' ci-test-secret > "$d/client-secret"
+          printf '%s\n' https://hub.example.com > "$d/public-urls"
+          PORT=3002 HOSTNAME=127.0.0.1 HUB_AUTH=oidc HUB_OIDC_DIR="$d" node .next/standalone/server.js &
+          pid=$!
+          for i in 1 2 3 4 5 6 7 8 9 10; do curl -s -o /dev/null http://127.0.0.1:3002/api/v1/health && break; sleep 1; done
+          code() { curl -s -o /dev/null -w '%{http_code}' "$@"; }
+          test "$(code http://127.0.0.1:3002/api/v1/health)" = 200
+          test "$(code http://127.0.0.1:3002/api/v1/catalog)" = 401
+          test "$(code http://127.0.0.1:3002/)" = 307
+          curl -s -D - -o /dev/null -H 'Host: hub.example.com' http://127.0.0.1:3002/areas/x | grep -i '^location: https://hub.example.com/auth/login?next=%2Fareas%2Fx'
+          loc=$(curl -s -D - -o /dev/null http://127.0.0.1:3002/auth/login | tr -d '\r' | grep -i '^location:')
+          echo "$loc"
+          echo "$loc" | grep -q 'https://sso.example.com/realms/lab/protocol/openid-connect/auth?'
+          echo "$loc" | grep -q 'code_challenge_method=S256'
+          echo "$loc" | grep -q 'redirect_uri=https%3A%2F%2Fhub.example.com%2Fauth%2Fcallback'
+          # The login cookie anyone can get must not open the app when sent as a session.
+          lc=$(curl -s -D - -o /dev/null http://127.0.0.1:3002/auth/login | tr -d '\r' | sed -n 's/^[Ss]et-[Cc]ookie: hub_login=\([^;]*\);.*/\1/p')
+          test -n "$lc"
+          test "$(code -H "Cookie: hub_session=$lc" http://127.0.0.1:3002/api/v1/catalog)" = 401
+          kill $pid
+          PORT=3003 HOSTNAME=127.0.0.1 HUB_AUTH=oidc HUB_OIDC_DIR=/nonexistent node .next/standalone/server.js &
+          pid=$!
+          for i in 1 2 3 4 5 6 7 8 9 10; do curl -s -o /dev/null http://127.0.0.1:3003/api/v1/health && break; sleep 1; done
+          test "$(code http://127.0.0.1:3003/api/v1/health)" = 200
+          curl -sf http://127.0.0.1:3003/api/v1/health | grep -q 'not configured'
+          test "$(code http://127.0.0.1:3003/)" = 503
+          test "$(code http://127.0.0.1:3003/api/v1/catalog)" = 503
+          kill $pid
       - name: Menu is plain links without scripts
         run: |
           PORT=3001 HOSTNAME=127.0.0.1 node .next/standalone/server.js &

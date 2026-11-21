@@ -8,7 +8,7 @@ import { SESSION_COOKIE, decide, pickOrigin } from '@/lib/auth/guard'
 // through; with oidc it needs a valid session or sends the visitor to sign in. Spec 0007.
 export function proxy(req: NextRequest) {
   const cfg = loadConfig()
-  const key = cfg.mode === 'oidc' ? deriveKey(cfg.secret) : null
+  const key = cfg.mode === 'oidc' ? deriveKey(cfg.secret, 'session') : null
   const d = decide(cfg, key, req.nextUrl.pathname, req.nextUrl.search, req.cookies.get(SESSION_COOKIE)?.value)
   if (d.action === 'allow') return NextResponse.next()
   if (d.action === 'deny') return NextResponse.json({ error: d.message }, { status: d.status })

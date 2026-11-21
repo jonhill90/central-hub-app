@@ -38,13 +38,13 @@ describe('ID token check (req 1)', () => {
 })
 
 describe('session cookie (req 2)', () => {
-  const key = deriveKey('s3cret')
+  const key = deriveKey('s3cret', 'session')
   it('round-trips, and fails after tampering, expiry or with another key', () => {
     const c = seal({ sub: 'u1', exp: NOW / 1000 + 10 }, key)
     expect(unseal<{ sub: string; exp: number }>(c, key, NOW)?.sub).toBe('u1')
     expect(unseal(c.replace(/^./, (x) => (x === 'a' ? 'b' : 'a')), key, NOW)).toBeNull()
     expect(unseal(c, key, NOW + 20_000)).toBeNull()
-    expect(unseal(c, deriveKey('other'), NOW)).toBeNull()
+    expect(unseal(c, deriveKey('other', 'session'), NOW)).toBeNull()
     expect(unseal(undefined, key, NOW)).toBeNull()
     expect(unseal('junk', key, NOW)).toBeNull()
   })
@@ -70,7 +70,7 @@ describe('configuration fails closed (req 3)', () => {
 })
 
 describe('the guard (req 4)', () => {
-  const key = deriveKey('s3cret')
+  const key = deriveKey('s3cret', 'session')
   const ok = { mode: 'oidc' }
   const cookie = seal({ sub: 'u', name: 'u', groups: [], exp: NOW / 1000 + 10 }, key)
   it('off lets everything through', () => expect(decide({ mode: 'off' }, null, '/areas/x', '', undefined, NOW)).toEqual({ action: 'allow' }))
@@ -100,9 +100,26 @@ describe('the guard (req 4)', () => {
   })
 })
 
+describe('cookies are not interchangeable (req 8)', () => {
+  const cfg = { mode: 'oidc' as const, issuer: ISS, internal: ISS, clientId: 'central-hub-app', secret: 's3cret', origins: ['https://a.example.com'], groups: ['lab-admins'] }
+  it('the login cookie from /auth/login is refused as a session, by the guard and by unseal', () => {
+    const { cookie } = startLogin(cfg, 'https://a.example.com', '/', NOW)
+    const sessionKey = deriveKey(cfg.secret, 'session')
+    expect(unseal(cookie, sessionKey, NOW)).toBeNull()
+    expect(decide({ mode: 'oidc' }, sessionKey, '/api/v1/catalog', '', cookie, NOW)).toMatchObject({ action: 'deny', status: 401 })
+    expect(decide({ mode: 'oidc' }, sessionKey, '/areas/x', '', cookie, NOW)).toMatchObject({ action: 'login' })
+  })
+  it('a session cookie is refused as a login cookie', async () => {
+    const session = seal({ sub: 'u', name: 'u', groups: ['lab-admins'], exp: NOW / 1000 + 100 }, deriveKey(cfg.secret, 'session'))
+    expect(unseal(session, deriveKey(cfg.secret, 'login'), NOW)).toBeNull()
+    const r = await finishLogin(cfg, new URLSearchParams({ code: 'c', state: 's' }), session, (async () => new Response('{}')) as never, NOW)
+    expect(r).toMatchObject({ ok: false, status: 400 })
+  })
+})
+
 describe('the code flow (req 5)', () => {
   const cfg = { mode: 'oidc' as const, issuer: ISS, internal: 'http://sso.internal:8080/realms/lab', clientId: 'central-hub-app', secret: 's3cret', origins: ['https://a.example.com'], groups: ['lab-admins', 'lab-viewers'] }
-  const key = deriveKey(cfg.secret)
+  const key = deriveKey(cfg.secret, 'session')
   it('the login address carries PKCE S256, state, nonce and the exact redirect', () => {
     const { url } = startLogin(cfg, 'https://a.example.com', '/agents', NOW)
     const u = new URL(url), q = u.searchParams

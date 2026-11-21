@@ -3,9 +3,12 @@ import { createHash, createHmac, createPublicKey, hkdfSync, randomBytes, timingS
 
 export const b64u = (b: Buffer | string): string => Buffer.from(b).toString('base64url')
 
-/** One signing key per client secret; the secret itself is never used as a key directly. */
-export function deriveKey(secret: string): Buffer {
-  return Buffer.from(hkdfSync('sha256', secret, 'central-hub-app', 'session-cookie-v1', 32))
+export type Purpose = 'session' | 'login'
+
+/** One signing key per client secret and per cookie purpose, so a cookie made for one use is refused for another
+ *  (a login cookie, which anyone can get from /auth/login, must never pass as a session). */
+export function deriveKey(secret: string, purpose: Purpose): Buffer {
+  return Buffer.from(hkdfSync('sha256', secret, 'central-hub-app', `${purpose}-cookie-v2`, 32))
 }
 
 /** `<payload>.<mac>`; the payload is JSON, so a cookie carries no secret and is only tamper-proof. */

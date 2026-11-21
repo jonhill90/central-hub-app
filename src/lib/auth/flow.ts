@@ -16,14 +16,13 @@ export function startLogin(cfg: Oidc, origin: string, next: string, now = Date.n
     response_type: 'code', client_id: cfg.clientId, redirect_uri: `${origin}/auth/callback`, scope: 'openid',
     state: login.state, nonce: login.nonce, code_challenge: challenge, code_challenge_method: 'S256',
   })
-  return { url: `${cfg.issuer}/protocol/openid-connect/auth?${q}`, cookie: seal(login, deriveKey(cfg.secret)) }
+  return { url: `${cfg.issuer}/protocol/openid-connect/auth?${q}`, cookie: seal(login, deriveKey(cfg.secret, 'login')) }
 }
 
 export type CallbackResult = { ok: true; session: string; next: string } | { ok: false; status: number; message: string }
 
 export async function finishLogin(cfg: Oidc, query: URLSearchParams, loginCookie: string | undefined, fetchFn: typeof fetch = fetch, now = Date.now()): Promise<CallbackResult> {
-  const key = deriveKey(cfg.secret)
-  const login = unseal<Login>(loginCookie, key, now)
+  const login = unseal<Login>(loginCookie, deriveKey(cfg.secret, 'login'), now)
   if (!login) return { ok: false, status: 400, message: 'the sign-in took too long or did not start here; try again' }
   if (query.get('error')) return { ok: false, status: 403, message: `the sign-in was refused: ${query.get('error')}` }
   const code = query.get('code')
@@ -43,7 +42,7 @@ export async function finishLogin(cfg: Oidc, query: URLSearchParams, loginCookie
     const groups = Array.isArray(claims.groups) ? claims.groups.filter((g) => typeof g === 'string') : []
     if (cfg.groups.length > 0 && !groups.some((g) => cfg.groups.includes(g))) return { ok: false, status: 403, message: 'this account is not in a group that may open the app' }
     const session: Session = { sub: claims.sub, name: claims.preferred_username || claims.sub, groups, exp: Math.floor(now / 1000) + SESSION_SECONDS }
-    return { ok: true, session: seal(session, key), next: login.next }
+    return { ok: true, session: seal(session, deriveKey(cfg.secret, 'session')), next: login.next }
   } catch (e) {
     return { ok: false, status: 502, message: `the sign-in could not be checked: ${(e as Error).message}` }
   }

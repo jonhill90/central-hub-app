@@ -53,6 +53,10 @@ jobs:
           echo "$loc" | grep -q 'https://sso.example.com/realms/lab/protocol/openid-connect/auth?'
           echo "$loc" | grep -q 'code_challenge_method=S256'
           echo "$loc" | grep -q 'redirect_uri=https%3A%2F%2Fhub.example.com%2Fauth%2Fcallback'
+          # The login cookie anyone can get must not open the app when sent as a session.
+          lc=$(curl -s -D - -o /dev/null http://127.0.0.1:3002/auth/login | tr -d '\r' | sed -n 's/^[Ss]et-[Cc]ookie: hub_login=\([^;]*\);.*/\1/p')
+          test -n "$lc"
+          test "$(code -H "Cookie: hub_session=$lc" http://127.0.0.1:3002/api/v1/catalog)" = 401
           kill $pid
           PORT=3003 HOSTNAME=127.0.0.1 HUB_AUTH=oidc HUB_OIDC_DIR=/nonexistent node .next/standalone/server.js &
           pid=$!

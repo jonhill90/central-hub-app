@@ -12,6 +12,6 @@ Status: accepted by the agents (reviewer pass required), 2026-11-21. Decider: an
 | Copy hill90's Tailwind classes and components as they are | Tailwind and next-auth would come with them; the plain CSS keeps tokens in one file and the part list short |
 | Inline SVG icons by hand | More code to keep; `lucide-react` is the same set the old app used (ISC licence, pinned, over 14 days old) |
 
-**Exit path.** `lucide-react` is imported only in `src/components/` and the page files; swapping it touches those imports. The mark is one component, `HillLogo.tsx`; delete it and its line in `Shell.tsx`. A different theme is a new set of values in `tokens.css`.
+**Exit path.** `lucide-react` is imported only in `src/components/` and `src/app/` page files; swapping it touches those imports. The mark is one component, `HillLogo.tsx`; delete it and its line in `Shell.tsx`. A different theme is a new set of values in `tokens.css`.
 
 **Not proven.** The bell, theme toggle and avatar of the old top bar are not here: nothing real feeds them yet (no notifications, no per-person choice, sign-in is off). A real phone was not tried.

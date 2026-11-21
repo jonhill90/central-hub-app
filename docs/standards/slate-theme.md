@@ -1,12 +1,12 @@
 # Standard: the slate theme
 
-The look of this app. A theme changes only tokens (colour, corner radius, font); layout, spacing and the meaning of status colours never change with it. Dark slate is the default; light slate follows the browser's light setting.
+The look of this app. A theme changes only tokens (colour, corner radius, font); layout, spacing and the meaning of status colours never change with it. Dark slate is the default; light slate follows the browser's light setting, and the sun/moon button in the top bar overrides both (saved in the browser, `data-theme` on the page).
 
 ## Rules
 
 1. Cool greys on a blue-grey base. The four slate greys `#7a8e96`, `#60757d`, `#4c5a63`, `#3c4a52` anchor the palette (dark `--border` is the last one; light `--muted` is the third). The surfaces `--bg`, `--surface` and `--raised` are darker or lighter steps in the same hue, an agent pick, not values taken from those greys.
-2. Rounded corners through one token: `--radius` is `8px`. Nothing in `src/styles/` sets a border radius other than through `--radius` (or half of it, for a key cap), except status dots.
-3. Green means "you can act here or you are here": links, the current menu item, icon boxes, and the filled primary button. Fill and text of the button come from `--accent-fill` and `--on-accent`, not from `--accent`. Green is not used for badges, borders of cards or page backgrounds.
+2. Rounded corners through one token: `--radius` is `8px`. Nothing in `src/styles/` sets a border radius other than through `--radius` (or half of it, for a key cap), except status dots (`50%`) and status chips and the avatar (a pill, `999px`, and a circle).
+3. Green means "you can act here or you are here": links, the current menu item, icon boxes, the border of the focused search box, and the filled primary button. Fill and text of the button come from `--accent-fill` and `--on-accent`, not from `--accent`. Green is not used for badges, borders of cards or page backgrounds.
 4. Status colours are tinted chips (the colour as text on a 16% fill of itself over the surface), never a solid bar. One colour per state, everywhere: waiting amber, doing blue, ready green, blocked red, idea violet, parked grey. A chip always carries its word, never colour alone.
 5. The mountain mark sits at the top left, filled from `--logo-light` and `--logo-dark` (two of the four slate greys). No gradient across text, no glow, no neon.
 6. Every pair in the table below reaches 4.5:1 (WCAG 2.2 AA); a test checks it.
@@ -21,7 +21,7 @@ The look of this app. A theme changes only tokens (colour, corner radius, font);
 | `--border` | `#3c4a52` | `#c3cdd2` | lines |
 | `--text` | `#e2e8ec` | `#1c2428` | body text |
 | `--muted` | `#9aabb2` | `#4c5a63` | labels, captions |
-| `--accent` | `#6db33a` | `#3b7316` | links, the current menu item, icon boxes |
+| `--accent` | `#6db33a` | `#3b7316` | links, the current menu item, icon boxes, the focused search border |
 | `--accent-hover` | `#86c653` | `#2c5a0f` | link hover |
 | `--accent-fill` | `#4a8024` | `#3b7316` | primary button fill |
 | `--on-accent` | `#ffffff` | `#ffffff` | text on the primary button |

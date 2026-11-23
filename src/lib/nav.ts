@@ -10,6 +10,7 @@ export function buildNav(c: Catalog): Nav {
     top: [
       { id: 'hub', label: 'Hub', href: '/' },
       { id: 'agents', label: 'Agents', href: '/agents' },
+      { id: 'notebook', label: 'Notebook', href: '/notebook' },
     ],
     areas: c.areas.map((a) => ({
       id: a.id,

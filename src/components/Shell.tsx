@@ -2,7 +2,7 @@
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
-import { Bot, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Home, Menu, Search } from 'lucide-react'
+import { Bot, BookOpen, ChevronDown, ChevronRight, ChevronsLeft, ChevronsRight, Home, Menu, Search } from 'lucide-react'
 import type { Nav } from '@/lib/nav'
 import { areaIcon } from './icons'
 import { HillLogo } from './HillLogo'
@@ -177,7 +177,7 @@ export function Shell({ nav, children }: { nav: Nav; children: ReactNode }) {
       <nav id="side" className="side" aria-label="Main">
         <ul className="top">
           {nav.top.map((l) => {
-            const Icon = l.id === 'agents' ? Bot : Home
+            const Icon = l.id === 'agents' ? Bot : l.id === 'notebook' ? BookOpen : Home
             return (
               <li key={l.id}>
                 <Link href={l.href} title={collapsed ? l.label : undefined} aria-current={path === l.href || (l.href !== '/' && path.startsWith(l.href + '/')) ? 'page' : undefined}>

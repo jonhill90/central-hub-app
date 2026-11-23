@@ -7,15 +7,32 @@ import { getCatalog as readCatalog } from './catalog'
 import { getAgents as readAgents } from './agents'
 import type { Catalog } from './types'
 import type { AgentView } from './sheet'
+import * as nb from './notebook'
+import type { FolderView, NoteMeta, NoteView, NotebookState } from './notebook'
+
+export type { FolderView, NoteMeta, NoteView, NotebookState }
+export { NotebookError } from './notebook'
 
 export interface HubApi {
   getCatalog(): Promise<Catalog>
   getAgents(): Promise<AgentView[]>
+  notebook: {
+    state(): Promise<NotebookState>
+    folder(path: string): Promise<FolderView>
+    note(path: string): Promise<NoteView>
+    search(q: string): Promise<NoteMeta[]>
+  }
 }
 
 export const localHub: HubApi = {
   getCatalog: async () => readCatalog(),
   getAgents: async () => readAgents(),
+  notebook: {
+    state: async () => nb.state(),
+    folder: async (p) => nb.getFolder(p),
+    note: async (p) => nb.getNote(p),
+    search: async (q) => nb.search(q),
+  },
 }
 
 export function httpHub(baseUrl: string, fetchFn: typeof fetch = fetch): HubApi {
@@ -28,6 +45,12 @@ export function httpHub(baseUrl: string, fetchFn: typeof fetch = fetch): HubApi 
   return {
     getCatalog: () => get<Catalog>('/api/v1/catalog'),
     getAgents: async () => (await get<{ agents: AgentView[] }>('/api/v1/agents')).agents,
+    notebook: {
+      state: () => get<NotebookState>('/api/v1/notebook'),
+      folder: (p) => get<FolderView>('/api/v1/notebook/folder?path=' + encodeURIComponent(p)),
+      note: (p) => get<NoteView>('/api/v1/notebook/note?path=' + encodeURIComponent(p)),
+      search: async (q) => (await get<{ notes: NoteMeta[] }>('/api/v1/notebook/search?q=' + encodeURIComponent(q))).notes,
+    },
   }
 }
 

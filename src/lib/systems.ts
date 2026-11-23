@@ -18,7 +18,7 @@ export interface ProxmoxResource {
   maxdisk: number | null
   uptime: number | null   // seconds
 }
-export interface ProxmoxSnapshot { generatedAt: string; ageSeconds: number; stale: boolean; resources: ProxmoxResource[] }
+export interface ProxmoxSnapshot { generatedAt: string; ageSeconds: number; stale: boolean; partial: boolean; resources: ProxmoxResource[] }
 export type SnapshotState<T> = { connected: false; reason: string } | ({ connected: true } & T)
 
 export const STALE_AFTER_SECONDS = 2 * 3600
@@ -30,7 +30,7 @@ const text = (v: unknown, max = 120): string => (typeof v === 'string' ? v.slice
 export function parseProxmox(raw: string, now: number = Date.now()): SnapshotState<{ snapshot: ProxmoxSnapshot }> {
   let j: unknown
   try { j = JSON.parse(raw) } catch { return { connected: false, reason: 'the Proxmox snapshot is not valid JSON' } }
-  const o = j as { generatedAt?: unknown; resources?: unknown }
+  const o = j as { generatedAt?: unknown; resources?: unknown; source?: unknown }
   const t = typeof o?.generatedAt === 'string' ? Date.parse(o.generatedAt) : NaN
   if (!Array.isArray(o?.resources) || Number.isNaN(t)) return { connected: false, reason: 'the Proxmox snapshot has no generatedAt or resources' }
   const resources: ProxmoxResource[] = []
@@ -42,7 +42,7 @@ export function parseProxmox(raw: string, now: number = Date.now()): SnapshotSta
     })
   }
   const ageSeconds = Math.max(0, Math.round((now - t) / 1000))
-  return { connected: true, snapshot: { generatedAt: new Date(t).toISOString(), ageSeconds, stale: ageSeconds > STALE_AFTER_SECONDS, resources } }
+  return { connected: true, snapshot: { generatedAt: new Date(t).toISOString(), ageSeconds, stale: ageSeconds > STALE_AFTER_SECONDS, partial: o.source === 'proxmox-dev', resources } }
 }
 
 export function getProxmox(now: number = Date.now()): SnapshotState<{ snapshot: ProxmoxSnapshot }> {

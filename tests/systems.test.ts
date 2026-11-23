@@ -25,6 +25,12 @@ describe('systems feed (spec 0011)', () => {
     expect(fresh.connected && fresh.snapshot.stale).toBe(false)
     expect(old.connected && old.snapshot.stale).toBe(true)
   })
+  it('flags a snapshot read with the dev token as partial', () => {
+    const dev = parseProxmox(snap({ source: 'proxmox-dev' }), NOW); const lab = parseProxmox(snap({ source: 'proxmox-lab' }), NOW)
+    expect(dev.connected && dev.snapshot.partial).toBe(true)
+    expect(lab.connected && lab.snapshot.partial).toBe(false)
+    expect(parseProxmox(snap(), NOW).connected && (parseProxmox(snap(), NOW) as { snapshot: { partial: boolean } }).snapshot.partial).toBe(false)
+  })
   it('a snapshot that is not JSON or has no time says so instead of showing anything', () => {
     expect(parseProxmox('nope', NOW)).toEqual({ connected: false, reason: expect.stringContaining('not valid JSON') })
     expect(parseProxmox('{"resources":[]}', NOW)).toEqual({ connected: false, reason: expect.stringContaining('generatedAt') })

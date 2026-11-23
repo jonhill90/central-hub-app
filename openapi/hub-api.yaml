@@ -279,11 +279,12 @@ components:
             snapshot:
               type: object
               additionalProperties: false
-              required: [generatedAt, ageSeconds, stale, resources]
+              required: [generatedAt, ageSeconds, stale, partial, resources]
               properties:
                 generatedAt: {type: string}
                 ageSeconds: {type: integer, minimum: 0}
                 stale: {type: boolean}
+                partial: {type: boolean, description: "true when the feed read Proxmox with the dev token, so the list shows only the dev VMs"}
                 resources:
                   type: array
                   items: {$ref: '#/components/schemas/ProxmoxResource'}

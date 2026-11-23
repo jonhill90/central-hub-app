@@ -8,14 +8,17 @@ import { getAgents as readAgents } from './agents'
 import type { Catalog } from './types'
 import type { AgentView } from './sheet'
 import * as nb from './notebook'
+import { getProxmox, type ProxmoxSnapshot, type SnapshotState } from './systems'
 import type { FolderView, NoteMeta, NoteView, NotebookState } from './notebook'
 
 export type { FolderView, NoteMeta, NoteView, NotebookState }
 export { NotebookError } from './notebook'
+export type { ProxmoxResource, ProxmoxSnapshot, SnapshotState } from './systems'
 
 export interface HubApi {
   getCatalog(): Promise<Catalog>
   getAgents(): Promise<AgentView[]>
+  systems: { proxmox(): Promise<SnapshotState<{ snapshot: ProxmoxSnapshot }>> }
   notebook: {
     state(): Promise<NotebookState>
     folder(path: string): Promise<FolderView>
@@ -27,6 +30,7 @@ export interface HubApi {
 export const localHub: HubApi = {
   getCatalog: async () => readCatalog(),
   getAgents: async () => readAgents(),
+  systems: { proxmox: async () => getProxmox() },
   notebook: {
     state: async () => nb.state(),
     folder: async (p) => nb.getFolder(p),
@@ -45,6 +49,7 @@ export function httpHub(baseUrl: string, fetchFn: typeof fetch = fetch): HubApi 
   return {
     getCatalog: () => get<Catalog>('/api/v1/catalog'),
     getAgents: async () => (await get<{ agents: AgentView[] }>('/api/v1/agents')).agents,
+    systems: { proxmox: () => get<SnapshotState<{ snapshot: ProxmoxSnapshot }>>('/api/v1/systems/proxmox') },
     notebook: {
       state: () => get<NotebookState>('/api/v1/notebook'),
       folder: (p) => get<FolderView>('/api/v1/notebook/folder?path=' + encodeURIComponent(p)),

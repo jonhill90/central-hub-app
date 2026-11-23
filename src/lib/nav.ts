@@ -11,6 +11,7 @@ export function buildNav(c: Catalog): Nav {
       { id: 'hub', label: 'Hub', href: '/' },
       { id: 'agents', label: 'Agents', href: '/agents' },
       { id: 'notebook', label: 'Notebook', href: '/notebook' },
+      { id: 'systems', label: 'Systems', href: '/systems' },
     ],
     areas: c.areas.map((a) => ({
       id: a.id,

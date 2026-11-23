@@ -1,6 +1,6 @@
 # Spec 0009: top bar search, bell, theme toggle and avatar (frozen once merged)
 
-Finishes the look of hill90-app (decision 0006, spec 0008): its top bar has a search box you type into, a bell, a theme toggle and an avatar. Jon, 2026-11-21: "we have no search"; he wants it to look like the old layout.
+Finishes the look of hill90-app (decision 0006, spec 0008): its top bar has a search box you type into, a bell, a theme toggle and an avatar. On 2026-11-21 the owner pointed out that the app had no search and asked for it to look like the old layout.
 
 ## What is added
 

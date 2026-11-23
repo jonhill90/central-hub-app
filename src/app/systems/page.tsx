@@ -43,7 +43,7 @@ export default async function Systems() {
         return (
           <>
             <p>As of <time dateTime={s.generatedAt}>{s.generatedAt.replace('T', ' ').slice(0, 16)} UTC</time> ({age(s.ageSeconds)} ago).{s.stale && <strong> This snapshot is old: the feed may have stopped.</strong>}{' '}
-              {vms.filter((v) => v.status === 'running').length} of {vms.length} guests running.</p>
+              {vms.filter((v) => v.status === 'running').length} of {vms.length} guests running.{s.partial && <strong> Partial list (dev token): the feed fell back to a token that sees only the dev VMs.</strong>}</p>
             {nodes.length > 0 && (<><h3>Nodes</h3><Table rows={nodes} /></>)}
             <h3>Guests</h3>{vms.length ? <Table rows={vms} /> : <p>The snapshot lists no guests.</p>}
             {stores.length > 0 && (<><h3>Storage</h3><Table rows={stores} /></>)}

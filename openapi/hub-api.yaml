@@ -88,6 +88,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/NotebookSearch'
         '503': {description: No notebook is connected}
+  /api/v1/systems/proxmox:
+    get:
+      operationId: getProxmox
+      summary: The latest Proxmox snapshot the platform delivered, or why there is none
+      responses:
+        '200':
+          description: The snapshot, or connected false with a reason
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProxmoxState'
 components:
   schemas:
     Status:
@@ -241,3 +252,44 @@ components:
         notes:
           type: array
           items: {$ref: '#/components/schemas/NoteMeta'}
+    ProxmoxResource:
+      type: object
+      additionalProperties: false
+      required: [type, id, name, node, status, cpu, maxcpu, mem, maxmem, disk, maxdisk, uptime]
+      properties:
+        type: {enum: [node, qemu, lxc, storage]}
+        id: {type: string}
+        name: {type: string}
+        node: {type: string}
+        status: {type: string}
+        cpu: {type: [number, 'null']}
+        maxcpu: {type: [number, 'null']}
+        mem: {type: [number, 'null']}
+        maxmem: {type: [number, 'null']}
+        disk: {type: [number, 'null']}
+        maxdisk: {type: [number, 'null']}
+        uptime: {type: [number, 'null']}
+    ProxmoxState:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [connected, snapshot]
+          properties:
+            connected: {const: true}
+            snapshot:
+              type: object
+              additionalProperties: false
+              required: [generatedAt, ageSeconds, stale, resources]
+              properties:
+                generatedAt: {type: string}
+                ageSeconds: {type: integer, minimum: 0}
+                stale: {type: boolean}
+                resources:
+                  type: array
+                  items: {$ref: '#/components/schemas/ProxmoxResource'}
+        - type: object
+          additionalProperties: false
+          required: [connected, reason]
+          properties:
+            connected: {const: false}
+            reason: {type: string, minLength: 1}

@@ -1,6 +1,6 @@
 # Decision 0007: read the notebook from a folder of files, in the app
 
-Status: accepted by the agents on 2026-11-23, on the owner's ask of 2026-11-23 00:48 UTC ("an ability to actually use the notebook (like view it) all i see it lnks to github everywhre. do something real not fake").
+Status: accepted by the agents on 2026-11-23, on the owner's ask of 2026-11-23 00:48 UTC for a way to view the notebook in the app itself, where it then only linked out to GitHub.
 
 ## Decision
 

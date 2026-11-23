@@ -1,10 +1,10 @@
 # 0006: Look like the owner's earlier app, on the slate palette
 
-Status: accepted by the agents (reviewer pass required), 2026-11-21. Decider: an agent pick; Jon can change it. Prompted by Jon, 2026-11-21: "the central-hub-app does not look like hill90-app did."
+Status: accepted by the agents (reviewer pass required), 2026-11-21. Decider: an agent pick; Jon can change it. Prompted by the owner on 2026-11-21, who said the app no longer looked like hill90-app.
 
 **Decision.** The app takes the structure and feel of hill90-app's UI: the mountain mark top left, a top bar with a centred search box, an icon side menu that collapses to icons, rounded cards, stat tiles with icon boxes, and a filled green primary button, with the current menu item tinted green. Colours stay the slate tokens. The slate standard's rules 2, 3 and 5 are rewritten to allow this (square corners, green on links only and no logo came from the first slate pass and are what made the app look different).
 
-**Why.** The owner's words are the requirement; the old look was captured by running hill90-app locally and screenshotting it (`docs/evidence/hill90-home-desktop.png`), then compared with the new one (`docs/evidence/hill-look-desktop.png`). Its mark already uses the slate greys, so the slate palette and the old look agree.
+**Why.** The owner's request is the requirement; the old look was captured by running hill90-app locally and screenshotting it (`docs/evidence/hill90-home-desktop.png`), then compared with the new one (`docs/evidence/hill-look-desktop.png`). Its mark already uses the slate greys, so the slate palette and the old look agree.
 
 | Option | Why not |
 |---|---|

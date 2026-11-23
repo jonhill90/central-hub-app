@@ -12,13 +12,13 @@ const files = walk('src').filter((f) => /\.(ts|tsx)$/.test(f))
 
 describe('the data seam', () => {
   it('pages import data only from src/lib/hub.ts; only hub.ts imports the readers', () => {
-    const importers = files.filter((f) => /from ['"]@\/lib\/(catalog|agents|notebook)['"]|from ['"]\.\/(catalog|agents|notebook)['"]/.test(readFileSync(f, 'utf8')))
+    const importers = files.filter((f) => /from ['"]@\/lib\/(catalog|agents|notebook|systems)['"]|from ['"]\.\/(catalog|agents|notebook|systems)['"]/.test(readFileSync(f, 'utf8')))
     expect(importers).toEqual([path.join('src', 'lib', 'hub.ts')])
   })
 
   it('only src/lib/catalog.ts and src/lib/agents.ts import node:fs or read the catalog folders', () => {
     // config.ts reads the sign-in files the platform mounts (spec 0007); it never touches the catalog.
-    const readers = [path.join('src', 'lib', 'catalog.ts'), path.join('src', 'lib', 'agents.ts'), path.join('src', 'lib', 'notebook.ts'), path.join('src', 'lib', 'auth', 'config.ts')]
+    const readers = [path.join('src', 'lib', 'catalog.ts'), path.join('src', 'lib', 'agents.ts'), path.join('src', 'lib', 'notebook.ts'), path.join('src', 'lib', 'systems.ts'), path.join('src', 'lib', 'auth', 'config.ts')]
     const offenders = files.filter((f) => !readers.includes(f))
       .filter((f) => /from ['"](node:)?fs['"]|from ['"](node:)?fs\/promises['"]|catalog\/|\.yaml/.test(readFileSync(f, 'utf8')))
     expect(offenders).toEqual([])
